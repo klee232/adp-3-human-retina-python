@@ -1,6 +1,6 @@
 # Created by Kuan-Min Lee
 # All rights reserved to Leelab.ai
-# still need tested
+# passed
 
 # Brief User Introducttion:
 # This script includes some processing functions designed for rose-1 dataset
@@ -38,79 +38,122 @@ def partition_rose_1_dataset(train_ROSE_SVC_org,
     converted_train_ROSE_SDVC_org = converted_images[6]
     converted_train_ROSE_SDVC_orgGt = converted_images[7]
     
+    
     # grab out the number of files and determine the amount of training and validation dataset
-    num_files = converted_train_ROSE_SVC_org.shape[3]
+    num_files = converted_train_ROSE_SVC_org.shape[2]
     k = 4.0
     ratio = 1 / k
-    num_train_files = int(num_files * ratio)
-    num_valid_files = num_files - num_train_files
+    num_valid_files = int(num_files * ratio)
+    num_train_files = num_files - num_valid_files
+    
     
     # conduct k-fold dataset formation
     num_row = converted_train_ROSE_SVC_org.shape[0]
     num_col = converted_train_ROSE_SVC_org.shape[1]
-    fold_valid_ROSE_SVC_org = np.zeros((num_row, num_col, num_valid_files, k))
-    fold_valid_ROSE_SVC_orgGt = np.zeros((num_row, num_col, num_valid_files, k))
-    fold_valid_ROSE_SVC_thickGt = np.zeros((num_row, num_col, num_valid_files, k))
-    fold_valid_ROSE_SVC_thinGt = np.zeros((num_row, num_col, num_valid_files, k))
-    fold_valid_ROSE_DVC_org = np.zeros((num_row, num_col, num_valid_files, k))
-    fold_valid_ROSE_DVC_orgGt = np.zeros((num_row, num_col, num_valid_files, k))
-    fold_valid_ROSE_SDVC_org = np.zeros((num_row, num_col, num_valid_files, k))
-    fold_valid_ROSE_SDVC_orgGt = np.zeros((num_row, num_col, num_valid_files, k))
-    fold_train_ROSE_SVC_org = np.zeros((num_row, num_col, num_train_files, k))
-    fold_train_ROSE_SVC_orgGt = np.zeros((num_row, num_col, num_train_files, k))
-    fold_train_ROSE_SVC_thickGt = np.zeros((num_row, num_col, num_train_files, k))
-    fold_train_ROSE_SVC_thinGt = np.zeros((num_row, num_col, num_train_files, k))
-    fold_train_ROSE_DVC_org = np.zeros((num_row, num_col, num_train_files, k))
-    fold_train_ROSE_DVC_orgGt = np.zeros((num_row, num_col, num_train_files, k))
-    fold_train_ROSE_SDVC_org = np.zeros((num_row, num_col, num_train_files, k))
-    fold_train_ROSE_SDVC_orgGt = np.zeros((num_row, num_col, num_train_files, k))
+    # validation dataset
+    # SVC dataset
+    fold_valid_ROSE_SVC_org = np.zeros((num_row, num_col, num_valid_files, int(k)))
+    fold_valid_ROSE_SVC_orgGt = np.zeros((num_row, num_col, num_valid_files, int(k)))
+    fold_valid_ROSE_SVC_thickGt = np.zeros((num_row, num_col, num_valid_files, int(k)))
+    fold_valid_ROSE_SVC_thinGt = np.zeros((num_row, num_col, num_valid_files, int(k)))
+    
+    # DVC dataset
+    fold_valid_ROSE_DVC_org = np.zeros((num_row, num_col, num_valid_files, int(k)))
+    fold_valid_ROSE_DVC_orgGt = np.zeros((num_row, num_col, num_valid_files, int(k)))
+    
+    # SDVC dataset 
+    fold_valid_ROSE_SDVC_org = np.zeros((num_row, num_col, num_valid_files, int(k)))
+    fold_valid_ROSE_SDVC_orgGt = np.zeros((num_row, num_col, num_valid_files, int(k)))
+    
+    # validation dataset
+    # SVC dataset
+    fold_train_ROSE_SVC_org = np.zeros((num_row, num_col, num_train_files, int(k)))
+    fold_train_ROSE_SVC_orgGt = np.zeros((num_row, num_col, num_train_files, int(k)))
+    fold_train_ROSE_SVC_thickGt = np.zeros((num_row, num_col, num_train_files, int(k)))
+    fold_train_ROSE_SVC_thinGt = np.zeros((num_row, num_col, num_train_files, int(k)))
+    
+    # DVC dataset
+    fold_train_ROSE_DVC_org = np.zeros((num_row, num_col, num_train_files, int(k)))
+    fold_train_ROSE_DVC_orgGt = np.zeros((num_row, num_col, num_train_files, int(k)))
+    
+    # SDVC dataset
+    fold_train_ROSE_SDVC_org = np.zeros((num_row, num_col, num_train_files, int(k)))
+    fold_train_ROSE_SDVC_orgGt = np.zeros((num_row, num_col, num_train_files, int(k)))
+    
+    # conduct k-fold
     start_valid_ind = 0
-    end_valid_ind = num_valid_files - 1
-    for i_k in range(k):
+    end_valid_ind = num_valid_files 
+    for i_k in range(int(k)):
         # setupt index
         valid_index = np.arange(start_valid_ind, end_valid_ind)
-        train_intex = np.setdiff1d(np.arange(num_files), valid_index)
+        train_index = np.setdiff1d(np.arange(num_files), valid_index)
+        
         # grab out dataset
         # validation dataset
+        # SVC dataset
         current_fold_valid_ROSE_SVC_org = converted_train_ROSE_SVC_org[:, :, valid_index]
         current_fold_valid_ROSE_SVC_orgGt = converted_train_ROSE_SVC_orgGt[:, :, valid_index]
         current_fold_valid_ROSE_SVC_thickGt = converted_train_ROSE_SVC_thickGt[:, :, valid_index]
         current_fold_valid_ROSE_SVC_thinGt = converted_train_ROSE_SVC_thinGt[:, :, valid_index]
+        
+        # DVC dataset
         current_fold_valid_ROSE_DVC_org = converted_train_ROSE_DVC_org[:, :, valid_index]
         current_fold_valid_ROSE_DVC_orgGt = converted_train_ROSE_DVC_orgGt[:, :, valid_index]
+        
+        # SDVC dataset
         current_fold_valid_ROSE_SDVC_org = converted_train_ROSE_SDVC_org[:, :, valid_index]
         current_fold_valid_ROSE_SDVC_orgGt = converted_train_ROSE_SDVC_orgGt[:, :, valid_index]
+        
         # training dataset
+        # SVC dataset
         current_fold_train_ROSE_SVC_org = converted_train_ROSE_SVC_org[:, :, train_index]
         current_fold_train_ROSE_SVC_orgGt = converted_train_ROSE_SVC_orgGt[:, :, train_index]
         current_fold_train_ROSE_SVC_thickGt = converted_train_ROSE_SVC_thickGt[:, :, train_index]
         current_fold_train_ROSE_SVC_thinGt = converted_train_ROSE_SVC_thinGt[:, :, train_index]
+        
+        # DVC dataset
         current_fold_train_ROSE_DVC_org = converted_train_ROSE_DVC_org[:, :, train_index]
         current_fold_train_ROSE_DVC_orgGt = converted_train_ROSE_DVC_orgGt[:, :, train_index]
+        
+        # SDVC dataset
         current_fold_train_ROSE_SDVC_org = converted_train_ROSE_SDVC_org[:, :, train_index]
         current_fold_train_ROSE_SDVC_orgGt = converted_train_ROSE_SDVC_orgGt[:, :, train_index]
+        
         # store in the outcome
         # validation dataset
+        # SVC dataset
         fold_valid_ROSE_SVC_org[:, :, :, i_k] = current_fold_valid_ROSE_SVC_org
         fold_valid_ROSE_SVC_orgGt[:, :, :, i_k] = current_fold_valid_ROSE_SVC_orgGt
         fold_valid_ROSE_SVC_thickGt[:, :, :, i_k] = current_fold_valid_ROSE_SVC_thickGt
         fold_valid_ROSE_SVC_thinGt[:, :, :, i_k] = current_fold_valid_ROSE_SVC_thinGt
+        
+        # DVC dataset
         fold_valid_ROSE_DVC_org[:, :, :, i_k] = current_fold_valid_ROSE_DVC_org
         fold_valid_ROSE_DVC_orgGt[:, :, :, i_k] = current_fold_valid_ROSE_DVC_orgGt
+        
+        # SDVC dataset
         fold_valid_ROSE_SDVC_org[:, :, :, i_k] = current_fold_valid_ROSE_SDVC_org
         fold_valid_ROSE_SDVC_orgGt[:, :, :, i_k] = current_fold_valid_ROSE_SDVC_orgGt
+        
         # training dataset
+        # SVC dataset
         fold_train_ROSE_SVC_org[:, :, :, i_k] = current_fold_train_ROSE_SVC_org
         fold_train_ROSE_SVC_orgGt[:, :, :, i_k] = current_fold_train_ROSE_SVC_orgGt
         fold_train_ROSE_SVC_thickGt[:, :, :, i_k] = current_fold_train_ROSE_SVC_thickGt
         fold_train_ROSE_SVC_thinGt[:, :, :, i_k] = current_fold_train_ROSE_SVC_thinGt
+        
+        # DVC dataset
         fold_train_ROSE_DVC_org[:, :, :, i_k] = current_fold_train_ROSE_DVC_org
         fold_train_ROSE_DVC_orgGt[:, :, :, i_k] = current_fold_train_ROSE_DVC_orgGt
+        
+        # SDVC dataset
         fold_train_ROSE_SDVC_org[:, :, :, i_k] = current_fold_train_ROSE_SDVC_org
         fold_train_ROSE_SDVC_orgGt[:, :, :, i_k] = current_fold_train_ROSE_SDVC_orgGt
+        
         # update validation start and end indices
         start_valid_ind = start_valid_ind + num_valid_files
         end_valid_ind = end_valid_ind + num_valid_files
+        
         
     return {"fold_train_ROSE_SVC_org": fold_train_ROSE_SVC_org,
             "fold_train_ROSE_SVC_orgGt": fold_train_ROSE_SVC_orgGt,
@@ -210,6 +253,7 @@ def single_channel_checker_rose_1_dataset(
     # if it's, just stay still with input image
     else:
         converted_train_ROSE_SDVC_orgGt = train_ROSE_SDVC_orgGt
+     
      
     return (converted_train_ROSE_SVC_org, 
             converted_train_ROSE_SVC_orgGt, 

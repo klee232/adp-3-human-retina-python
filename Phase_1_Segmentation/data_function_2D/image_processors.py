@@ -1,6 +1,6 @@
 # Created by Kuan-Min Lee
 # All rights reserved to Leelab.ai
-# still need tested
+# passed
 
 # Brief User Introducttion:
 # This script includes methods for handling image dataset
@@ -38,7 +38,7 @@ def image_SingleChannel_converter(image):
 # p: path to image files
 # Output Parameter:
 # np.array of the read .tif images
-def image_safe_read_tif(p, height, width):
+def image_safe_read_tif(p):
     path = str(p)
     # check the input image type (1-byte(binary) vs 8-byte(0-255))
     import tifffile
