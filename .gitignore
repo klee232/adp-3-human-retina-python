@@ -1,0 +1,7 @@
+-e "\n# ignore model weights\n*.pt\n*.pth\nPhase_1_Segmentation/trained_nets/" 
+"*.pt" 
+"*.pth" 
+"Phase_1_Segmentation/trained_nets/" 
+*.pt
+*.pth
+Phase_1_Segmentation/trained_nets/
